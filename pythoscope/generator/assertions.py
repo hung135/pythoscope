@@ -384,7 +384,7 @@ def fix_tests_using_call_outputs(timeline):
                 isinstance(event.actual, (MethodCallContext, Call)) and \
                 event.actual.output.timestamp > event.actual.timestamp and \
                 used_later_than(event.actual.output, timeline, event.timestamp):
-            varname = name.next()
+            varname = next(name)
             yield Assign(varname, event.actual, event.actual.timestamp-0.0001)
             event.actual = varname
             yield event

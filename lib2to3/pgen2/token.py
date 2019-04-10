@@ -67,10 +67,17 @@ NT_OFFSET = 256
 #--end constants--
 
 tok_name = {}
-for _name, _value in globals().items():
+# for _name, _value in globals().items():
+#     if type(_value) is type(0):
+#         print(_value)
+#         tok_name[_value] = _name
+
+for key in list(globals().keys()):
+    _name=key
+    _value=globals()[key]
     if type(_value) is type(0):
         tok_name[_value] = _name
-
+        
 
 def ISTERMINAL(x):
     return x < NT_OFFSET

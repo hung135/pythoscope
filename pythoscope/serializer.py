@@ -50,9 +50,9 @@ def get_human_readable_id(obj):
     elif isinstance(obj, RePatternType):
         return "%s_pattern" % string2id(obj.pattern)
     elif isinstance(obj, types.FunctionType):
-        if obj.func_name == '<lambda>':
+        if obj.__name__ == '<lambda>':
             return "function"
-        return "%s_function" % obj.func_name
+        return "%s_function" % obj.__name__
     else:
         # str() may raise an exception.
         try:
@@ -163,7 +163,7 @@ class ImmutableObject(SerializedObject):
         >>> imports == set(['re'])
         True
         """
-        if isinstance(obj, (int, long, float, str, unicode, types.NoneType)):
+        if isinstance(obj, (int, long, float, str, unicode, type(None))):
             # Bultin types has very convienient representation.
             return repr(obj), set()
         elif isinstance(obj, RePatternType):
@@ -173,7 +173,7 @@ class ImmutableObject(SerializedObject):
             else:
                 return ('re.compile(%r)' % obj.pattern, set(['re']))
         elif isinstance(obj, types.FunctionType):
-            function = obj.func_name
+            function = obj.__name__
             module = obj.__module__
             return (function, set([(module, function)]))
         else:
@@ -318,9 +318,9 @@ class BuiltinException(CompositeObject):
 def is_immutable(obj):
     # Bool class is a subclass of int, so True and False are included in this
     # condition.
-    if isinstance(obj, (float, int, long, str, unicode, types.NoneType, RePatternType)):
+    if isinstance(obj, (float, int, long, str, unicode, type(None), RePatternType)):
         return True
-    elif isinstance(obj, types.FunctionType) and obj.func_name != '<lambda>':
+    elif isinstance(obj, types.FunctionType) and obj.__name__ != '<lambda>':
         return True
     return False
 

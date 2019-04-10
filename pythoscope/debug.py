@@ -1,13 +1,14 @@
-from util import class_of
+from __future__ import print_function
+from __future__ import absolute_import
+from .util import class_of
 
 
 def print_assigned_names(assigned_names):
-    print "ASSIGNED NAMES:"
+    print( "ASSIGNED NAMES:")
     for obj, name in assigned_names.iteritems():
-        print "    %s: %s(id=%s)" % (name, class_of(obj).__name__, id(obj))
+        print( "    %s: %s(id=%s)" % (name, class_of(obj).__name__, id(obj)))
 
 def print_timeline(timeline):
-    print "TIMELINE:"
+    print(  "TIMELINE:")
     for event in timeline:
-        print "    %5.2f: %r" % (event.timestamp, event)
-
+        print( "    %5.2f: %r" % (event.timestamp, event))

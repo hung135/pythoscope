@@ -58,14 +58,14 @@ except ImportError:
             return self
         def next(self):
             while self.currkey == self.tgtkey:
-                self.currvalue = self.it.next() # Exit on StopIteration
+                self.currvalue = next(self.it) # Exit on StopIteration
                 self.currkey = self.keyfunc(self.currvalue)
             self.tgtkey = self.currkey
             return (self.currkey, self._grouper(self.tgtkey))
         def _grouper(self, tgtkey):
             while self.currkey == tgtkey:
                 yield self.currvalue
-                self.currvalue = self.it.next() # Exit on StopIteration
+                self.currvalue = next(self.it) # Exit on StopIteration
                 self.currkey = self.keyfunc(self.currvalue)
 
 try:
@@ -76,5 +76,5 @@ except ImportError:
 
 # Ignore Python's 2.6 deprecation warning for sets module.
 warnings.simplefilter('ignore')
-import sets
+ 
 warnings.resetwarnings()

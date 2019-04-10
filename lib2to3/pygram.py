@@ -7,9 +7,9 @@
 import os
 
 # Local imports
-from pgen2 import token
-from pgen2 import driver
-import pytree
+from .pgen2 import token
+from .pgen2 import driver
+from . import pytree
 
 # The grammar file
 _GRAMMAR_FILE = os.path.join(os.path.dirname(__file__), "Grammar.txt")
@@ -23,7 +23,7 @@ class Symbols(object):
         Creates an attribute for each grammar symbol (nonterminal),
         whose value is the symbol's type (an int >= 256).
         """
-        for name, symbol in grammar.symbol2number.iteritems():
+        for name, symbol in grammar.symbol2number.items():
             setattr(self, name, symbol)
 
 

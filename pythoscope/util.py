@@ -1,4 +1,6 @@
-import cPickle
+
+#import cPickle
+import _pickle as cPickle
 import gc
 import itertools
 import operator
@@ -11,6 +13,7 @@ import warnings
 
 from pythoscope.compat import groupby, set, sorted
 from pythoscope.py_wrapper_object import get_wrapper_self
+from functools import reduce
 
 
 def compact(lst):

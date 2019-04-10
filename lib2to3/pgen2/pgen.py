@@ -2,9 +2,12 @@
 # Licensed to PSF under a Contributor Agreement.
 
 # Pgen imports
-import grammar, token, tokenize
+import grammar
+import token
+import tokenize
 
-class PgenGrammar(grammar.Grammar):
+class PgenGrammar():
+
     pass
 
 class ParserGenerator(object):
@@ -26,8 +29,8 @@ class ParserGenerator(object):
 
     def make_grammar(self):
         c = PgenGrammar()
-        names = self.dfas.keys()
-        names.sort()
+        names = sorted(self.dfas.keys())
+
         names.remove(self.startsymbol)
         names.insert(0, self.startsymbol)
         for name in names:
@@ -105,8 +108,9 @@ class ParserGenerator(object):
                     return ilabel
 
     def addfirstsets(self):
-        names = self.dfas.keys()
-        names.sort()
+        names = sorted(self.dfas.keys())
+
+        #names.sort()
         for name in names:
             if name not in self.first:
                 self.calcfirst(name)
@@ -118,7 +122,9 @@ class ParserGenerator(object):
         state = dfa[0]
         totalset = {}
         overlapcheck = {}
-        for label, next in state.arcs.iteritems():
+        for key in state.arcs.keys():
+            label=key
+            next=state.arcs[key]
             if label in self.dfas:
                 if label in self.first:
                     fset = self.first[label]
@@ -133,7 +139,9 @@ class ParserGenerator(object):
                 totalset[label] = 1
                 overlapcheck[label] = {label: 1}
         inverse = {}
-        for label, itsfirst in overlapcheck.iteritems():
+        for key in overlapcheck.keys():
+            label=key
+            itsfirst =overlapcheck[key]
             for symbol in itsfirst:
                 if symbol in inverse:
                     raise ValueError("rule %s is ambiguous; %s is in the"
@@ -192,7 +200,9 @@ class ParserGenerator(object):
                 for label, next in nfastate.arcs:
                     if label is not None:
                         addclosure(next, arcs.setdefault(label, {}))
-            for label, nfaset in arcs.iteritems():
+            for key in arcs.keys():
+                label=key
+                nfaset=arcs[key]
                 for st in states:
                     if st.nfaset == nfaset:
                         break
@@ -203,10 +213,10 @@ class ParserGenerator(object):
         return states # List of DFAState instances; first one is start
 
     def dump_nfa(self, name, start, finish):
-        print "Dump of NFA for", name
+        print("Dump of NFA for", name)
         todo = [start]
         for i, state in enumerate(todo):
-            print "  State", i, state is finish and "(final)" or ""
+            print("  State", i, state is finish and "(final)" or "")
             for label, next in state.arcs:
                 if next in todo:
                     j = todo.index(next)
@@ -214,16 +224,16 @@ class ParserGenerator(object):
                     j = len(todo)
                     todo.append(next)
                 if label is None:
-                    print "    -> %d" % j
+                    print( "    -> %d" % j)
                 else:
-                    print "    %s -> %d" % (label, j)
+                    print( "    %s -> %d" % (label, j))
 
     def dump_dfa(self, name, dfa):
-        print "Dump of DFA for", name
+        print("Dump of DFA for", name)
         for i, state in enumerate(dfa):
-            print "  State", i, state.isfinal and "(final)" or ""
+            print( "  State", i, state.isfinal and "(final)" or "")
             for label, next in state.arcs.iteritems():
-                print "    %s -> %d" % (label, dfa.index(next))
+                print( "    %s -> %d" % (label, dfa.index(next)))
 
     def simplify_dfa(self, dfa):
         # This is not theoretically optimal, but works well enough.
@@ -319,9 +329,9 @@ class ParserGenerator(object):
         return value
 
     def gettoken(self):
-        tup = self.generator.next()
+        tup = self.generator.__next__()
         while tup[0] in (tokenize.COMMENT, tokenize.NL):
-            tup = self.generator.next()
+            tup = self.generator.__next__()
         self.type, self.value, self.begin, self.end, self.line = tup
         #print token.tok_name[self.type], repr(self.value)
 
@@ -348,7 +358,7 @@ class DFAState(object):
 
     def __init__(self, nfaset, final):
         assert isinstance(nfaset, dict)
-        assert isinstance(iter(nfaset).next(), NFAState)
+        assert isinstance(iter(nfaset).__next__(), NFAState)
         assert isinstance(final, NFAState)
         self.nfaset = nfaset
         self.isfinal = final in nfaset
@@ -361,7 +371,9 @@ class DFAState(object):
         self.arcs[label] = next
 
     def unifystate(self, old, new):
-        for label, next in self.arcs.iteritems():
+        for key in self.arcs.keys():
+            label = key
+            next = self.arcs[key]
             if next is old:
                 self.arcs[label] = new
 
@@ -374,7 +386,9 @@ class DFAState(object):
         # would invoke this method recursively, with cycles...
         if len(self.arcs) != len(other.arcs):
             return False
-        for label, next in self.arcs.iteritems():
+        for key in self.arcs.keys():
+            label=key
+            next=self.arcs[key]
             if next is not other.arcs.get(label):
                 return False
         return True

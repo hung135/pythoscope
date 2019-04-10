@@ -302,7 +302,7 @@ def constructor_as_string(object, assigned_names={}):
     """
     if isinstance(object, list):
         return list_of(map(constructor_as_string, object))
-    elif assigned_names.has_key(object):
+    elif object in assigned_names:
         return CodeString(assigned_names[object])
     elif isinstance(object, UserObject):
         # Look for __init__ call and base the constructor on that.

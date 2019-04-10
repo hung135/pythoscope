@@ -8,7 +8,7 @@ class MissingSideEffectType(Exception):
 
 known_side_effects = {}
 def register_side_effect_type(trigger, klass):
-    if known_side_effects.has_key(trigger):
+    if trigger in known_side_effects:
         raise ValueError("Side effect for trigger %r already registered by %r." %\
                              (trigger, known_side_effects[trigger]))
     known_side_effects[trigger] = klass

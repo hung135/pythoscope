@@ -26,7 +26,7 @@ class GatheringResults(object):
     total = property(lambda s: s.passed + s.skipped + s.errors + s.failures)
 
 def notify(message):
-    print '*'*8, message
+    print('*'*8, message)
 
 def check_environment():
     notify("Checking environment...")
@@ -79,7 +79,7 @@ def get_code_metrics_from_file(code):
             self.methods += 1
     try:
         tree = parse(code)
-    except ParseError, e:
+    except ParseError as e:
         notify("Caught parse error: %s." % e)
         raise GatheringError("Failed at code metrics.")
     visitor = descend(tree, ModuleVisitor)

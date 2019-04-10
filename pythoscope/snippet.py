@@ -9,15 +9,17 @@ and the second before the application exists:
 
 pythoscope.stop()
 """
+from __future__ import print_function
+from __future__ import absolute_import
 
 import os
 import sys
 
-from cmdline import find_project_directory, PythoscopeDirectoryMissing
-from execution import Execution
-from store import Project
-from tracer import Tracer
-from inspector.dynamic import Inspector
+from .cmdline import find_project_directory, PythoscopeDirectoryMissing
+from .execution import Execution
+from .store import Project
+from .tracer import Tracer
+from .inspector.dynamic import Inspector
 
 
 project = None
@@ -34,9 +36,9 @@ def start():
         tracer.btracer.setup()
         sys.settrace(tracer.tracer)
     except PythoscopeDirectoryMissing:
-        print "Can't find .pythoscope/ directory for this project. " \
+        print("Can't find .pythoscope/ directory for this project. " \
             "Initialize the project with the '--init' option first. " \
-            "Pythoscope tracing disabled for this run."
+            "Pythoscope tracing disabled for this run.")
 
 def stop():
     global project, tracer, inspector

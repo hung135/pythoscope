@@ -949,7 +949,6 @@ class Module(Localizable, TestSuite):
                 raise ModuleNeedsAnalysis(self.subpath, out_of_sync=True)
             try:
                 self.write(self.get_content())
-            except DirectoryException, err:
+            except DirectoryException as err:
                 raise ModuleSaveError(self.subpath, err.args[0])
             self.changed = False
-

@@ -7,21 +7,23 @@ The grammer is taken from PatternGrammar.txt.
 
 The compiler compiles a pattern to a pytree.*Pattern instance.
 """
+from __future__ import absolute_import
 
+from builtins import object
 __author__ = "Guido van Rossum <guido@python.org>"
 
 # Python imports
 import os
 
 # Fairly local imports
-from pgen2 import driver
-from pgen2 import literals
-from pgen2 import token
-from pgen2 import tokenize
+from .pgen2 import driver
+from .pgen2 import literals
+from .pgen2 import token
+from .pgen2 import tokenize
 
 # Really local imports
-import pytree
-import pygram
+from . import pytree
+from . import pygram
 
 # The pattern grammar file
 _PATTERN_GRAMMAR_FILE = os.path.join(os.path.dirname(__file__),
@@ -31,7 +33,7 @@ _PATTERN_GRAMMAR_FILE = os.path.join(os.path.dirname(__file__),
 def tokenize_wrapper(input):
     """Tokenizes a string suppressing significant whitespace."""
     skip = (token.NEWLINE, token.INDENT, token.DEDENT)
-    tokens = tokenize.generate_tokens(driver.generate_lines(input).next)
+    tokens = tokenize.generate_tokens(driver.generate_lines(input).__next__)
     for quintuple in tokens:
         type, value, start, end, line_text = quintuple
         if type not in skip:

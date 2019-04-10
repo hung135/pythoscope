@@ -10,7 +10,11 @@
 This provides a high-level interface to parse a file into a syntax tree.
 
 """
+from __future__ import absolute_import
 
+from builtins import map
+from builtins import str
+from builtins import object
 __author__ = "Guido van Rossum <guido@python.org>"
 
 __all__ = ["Driver", "load_grammar"]
@@ -21,7 +25,7 @@ import logging
 import sys
 
 # Pgen imports
-import grammar, parse, token, tokenize, pgen
+from . import grammar, parse, token, tokenize, pgen
 
 
 class Driver(object):
@@ -100,7 +104,7 @@ class Driver(object):
 
     def parse_string(self, text, debug=False):
         """Parse a string and return the syntax tree."""
-        tokens = tokenize.generate_tokens(generate_lines(text).next)
+        tokens = tokenize.generate_tokens(generate_lines(text).__next__)
         return self.parse_tokens(tokens, debug)
 
 
@@ -129,7 +133,7 @@ def load_grammar(gt="Grammar.txt", gp=None,
             logger.info("Writing grammar tables to %s", gp)
             try:
                 g.dump(gp)
-            except IOError, e:
+            except IOError as e:
                 logger.info("Writing failed:"+str(e))
     else:
         g = grammar.Grammar()

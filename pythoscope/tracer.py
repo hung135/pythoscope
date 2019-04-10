@@ -38,7 +38,7 @@ def is_class_definition(frame):
     try:
         # Old-style classes are of type "ClassType", while new-style
         # classes or of type "type".
-        return callable_type(frame) in [types.ClassType, type]
+        return callable_type(frame) in [type, type]
     except KeyError:
         return frame.f_code.co_names[:2] == ('__name__', '__module__')
 
@@ -69,7 +69,7 @@ def get_method_information(frame):
         method = getattr(self, methodname)
 
         # This isn't a call on the first argument's method.
-        if not method.im_func.func_code == frame.f_code:
+        if not method.__func__.__code__ == frame.f_code:
             raise NotMethodFrame
 
         # Remove the "self" argument.
@@ -110,7 +110,7 @@ def make_callable(code):
     if isinstance(code, str):
         code = rewrite_lnotab(compile(code, "<string>", "exec"))
         def function():
-            exec code in {}
+            exec(code, {})
         return function
     return code
 
@@ -288,7 +288,7 @@ class StandardTracer(object):
         if code.co_name in IGNORED_NAMES:
             return True
         if self.top_level_function is not None \
-                and code is self.top_level_function.func_code:
+                and code is self.top_level_function.__code__:
             return True
         return False
 

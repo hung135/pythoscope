@@ -36,7 +36,7 @@ def assign_name_to_object(obj, assigned_names, rename=True):
     May reassign an existing name for an object as a side effect, unless
     `rename` is False.
     """
-    if assigned_names.has_key(obj):
+    if obj in assigned_names:
         return
     base = get_name_base_for_object(obj)
     other_obj = key_for_value(assigned_names, base)
